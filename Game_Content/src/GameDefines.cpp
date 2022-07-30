@@ -6,6 +6,5 @@
 
 void HelloGame()
 {
-	HelloEngine();
 	std::cout << "Hello from Game project!" << std::endl;
 }

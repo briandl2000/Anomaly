@@ -42,6 +42,7 @@ project "Anomaly"
     includedirs
     {
         "%{prj.name}/src",
+        "%{prj.name}/vendor/spdlog/include",
     }
 
     links
@@ -55,22 +56,22 @@ project "Anomaly"
 
         defines
         {
-            "ANO_PLATFORM_WINDOWS",
-            "ANO_BUILD_DLL"
+            "ANOM_PLATFORM_WINDOWS",
+            "ANOM_BUILD_DLL"
         }
 
     filter "configurations:Debug"
-        defines "DEBUG"
+        defines "ANOM_DEBUG"
         runtime "Debug"
         symbols "on"
 
     filter "configurations:Release"
-        defines "RELEASE"
+        defines "ANOM_RELEASE"
         runtime "Release"
         optimize "on"
 
     filter "configurations:Dist"
-        defines "DIST"
+        defines "ANOM_DIST"
         runtime "Release"
         optimize "on"
 
@@ -80,6 +81,8 @@ project "Game_Content"
     cppdialect "C++17"
     language "C++"
     staticruntime "on"
+
+    dependson { "Anomaly" }
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -110,17 +113,17 @@ project "Game_Content"
         }
 
     filter "configurations:Debug"
-        defines "DEBUG"
+        defines "ANOM_DEBUG"
         runtime "Debug"
         symbols "on"
 
     filter "configurations:Release"
-        defines "RELEASE"
+        defines "ANOM_RELEASE"
         runtime "Release"
         optimize "on"
 
     filter "configurations:Dist"
-        defines "DIST"
+        defines "ANOM_DIST"
         runtime "Release"
         optimize "on"
 
@@ -131,6 +134,8 @@ project "Game_Executable"
     language "C++"
     staticruntime "on"
 
+    dependson { "Anomaly", "Game_Content" }
+
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
@@ -168,17 +173,17 @@ project "Game_Executable"
         }
 
     filter "configurations:Debug"
-        defines "DEBUG"
+        defines "ANOM_DEBUG"
         runtime "Debug"
         symbols "on"
 
     filter "configurations:Release"
-        defines "RELEASE"
+        defines "ANOM_RELEASE"
         runtime "Release"
         optimize "on"
 
     filter "configurations:Dist"
-        defines "DIST"
+        defines "ANOM_DIST"
         runtime "Release"
         optimize "on"
 
@@ -189,6 +194,8 @@ project "Editor"
     language "C++"
     staticruntime "on"
 
+    dependson { "Anomaly", "Game_Content" }
+
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
@@ -225,16 +232,16 @@ project "Editor"
         }
 
     filter "configurations:Debug"
-        defines "DEBUG"
+        defines "ANOM_DEBUG"
         runtime "Debug"
         symbols "on"
 
     filter "configurations:Release"
-        defines "RELEASE"
+        defines "ANOM_RELEASE"
         runtime "Release"
         optimize "on"
 
     filter "configurations:Dist"
-        defines "DIST"
+        defines "ANOM_DIST"
         runtime "Release"
         optimize "on"

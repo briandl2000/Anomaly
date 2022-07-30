@@ -1,9 +1,7 @@
 #pragma once
 
-#if ENGINE_BUILD_DLL
-#define ENGINE_API __declspec(dllexport)
+#if ANOM_BUILD_DLL
+#define ANOM_API __declspec(dllexport)
 #else
-#define ENGINE_API __declspec(dllimport)
+#define ANOM_API __declspec(dllimport)
 #endif
-
-ENGINE_API void HelloEngine();

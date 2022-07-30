@@ -5,7 +5,7 @@
 
 int main()
 {
-	HelloEngine();
+
 	HelloGame();
 
 	std::cout << "Hello Game!" << std::endl;
