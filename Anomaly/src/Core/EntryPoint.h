@@ -6,7 +6,11 @@ extern Anomaly::Application* Anomaly::CreateApplication();
 
 int main(int argc, char** argv)
 {
+	Anomaly::InitializaLogging();
+
 	auto app = Anomaly::CreateApplication();
 	app->Run();
 	delete app;
+
+	Anomaly::ShutdownLogging();
 }

@@ -1,11 +1,13 @@
 #include "anompch.h"
 #include "Application.h"
+#include "Window.h"
+#include "Events/ApplicationEvent.h"
 
 namespace Anomaly
 {
 	struct ApplicationState
 	{
-		std::unique_ptr<Window> Window;
+		Scope<Window> Window;
 	};
 
 	static ApplicationState s_State = {};
@@ -14,7 +16,6 @@ namespace Anomaly
 
 	Application::Application(const ApplicationConfig& appConfig)
 	{
-		Anomaly::InitializaLogging();
 		ANOM_CORE_INFO("Creating Application...");
 
 		ANOM_CORE_ASSERT(!s_Instance, "Application already exists!");
@@ -25,8 +26,9 @@ namespace Anomaly
 		props.Width = appConfig.Width;
 		props.Height = appConfig.Height;
 
+		s_State.Window = CreateScope<Window>(props);
 
-		s_State.Window = std::unique_ptr<Window>(new Window(props));
+		s_State.Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
 		ANOM_CORE_INFO("Application Created.");
 
@@ -49,12 +51,31 @@ namespace Anomaly
 		
 	}
 
+	void Application::OnEvent(Event& e)
+	{
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
+
+		// for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+		// {
+		// 	(*--it)->OnEvent(e);
+		// 	if (e.Handled)
+		// 		break;
+		// }
+	}
+
 	void Application::ShutDown()
 	{
 		ANOM_CORE_INFO("Shutting down Application...");
 
 		s_State.Window = nullptr;
 
-		ShutdownLogging();
+	}
+
+	bool Application::OnWindowClose(WindowCloseEvent& e)
+	{
+		m_Running = false;
+
+		return true;
 	}
 }

@@ -24,7 +24,7 @@ namespace Anomaly
 	};
 
 	ANOM_API bool InitializaLogging();
-	void ShutdownLogging();
+	ANOM_API void ShutdownLogging();
 
 	ANOM_API void LogOutput(log_level level, const char* message, ...);
 	void LogOutputCore(log_level level, const char* message, ...);

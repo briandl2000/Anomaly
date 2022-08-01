@@ -7,7 +7,8 @@ public:
 	EditorApp(const Anomaly::ApplicationConfig& appConfig)
 		: Anomaly::Application(appConfig)
 	{
-		ANOM_INFO("Creating Editor APP...");
+		ANOM_INFO("Creating Editor App...");
+		ANOM_INFO("Finished creating Editor App");
 	}
 
 	~EditorApp()

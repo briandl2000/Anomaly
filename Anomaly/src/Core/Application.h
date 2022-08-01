@@ -1,9 +1,12 @@
 #pragma once
 
 #include "EngineDefines.h"
-#include "Window.h"
+#include "Events/ApplicationEvent.h"
+#include "Events/Event.h"
 
 namespace Anomaly {
+
+	#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
 	struct ApplicationConfig
 	{
@@ -23,8 +26,12 @@ namespace Anomaly {
 		
 		inline static Application& Get() { return *s_Instance; }
 
+		void OnEvent(Event& e);
+
 	private:
 		void ShutDown();
+
+		bool OnWindowClose(WindowCloseEvent& e);
 
 	private:
 		b8 m_Running = TRUE;

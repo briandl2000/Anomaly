@@ -1,6 +1,7 @@
 #pragma once
 
 #include "EngineDefines.h"
+#include "Events/Event.h"
 
 struct GLFWwindow;
 
@@ -17,6 +18,7 @@ namespace Anomaly
 	class Window
 	{
 	public:
+		using EventCallbackFn = std::function<void(Event&)>;
 
 		Window(const WindowProps& props);
 		~Window();
@@ -24,6 +26,8 @@ namespace Anomaly
 		u32 GetWidth();
 		u32 GetHeight();
 		void OnUpdate();
+
+		void SetEventCallback(const EventCallbackFn& callback) { m_Data.EventCallback = callback; };
 
 	private:
 		void Init(const WindowProps& props);
@@ -34,6 +38,8 @@ namespace Anomaly
 		{
 			char* Title;
 			u32 Width, Height;
+
+			EventCallbackFn EventCallback;
 		};
 
 		WindowData m_Data;
