@@ -7,7 +7,7 @@ public:
 	EditorApp(const Anomaly::ApplicationConfig& appConfig)
 		: Anomaly::Application(appConfig)
 	{
-		ANOM_INFO("Creating Game APP...");
+		ANOM_INFO("Creating Editor APP...");
 	}
 
 	~EditorApp()
@@ -20,7 +20,7 @@ Anomaly::Application* Anomaly::CreateApplication()
 	Anomaly::ApplicationConfig config;
 	config.Width = 900;
 	config.Height = 600;
-	config.Title = "GameApp";
+	config.Title = "EditorApp";
 
 	return new EditorApp(config);
 }

@@ -13,8 +13,10 @@ workspace "Anomaly"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
+IncludeDir["glfw"] = "Anomaly/Vendor/glfw/include"
 
 group "Dependencies"
+    include "Anomaly/vendor/glfw"
 
 group ""
 
@@ -27,6 +29,9 @@ project "Anomaly"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+    pchheader "anompch.h"
+    pchsource "Anomaly/src/anompch.cpp"
 
     files 
     {
@@ -43,13 +48,14 @@ project "Anomaly"
     {
         "%{prj.name}/src",
         "%{prj.name}/vendor/spdlog/include",
+        "%{IncludeDir.glfw}",
     }
 
     links
     {
+        "GLFW",
     }
 
-    flags { "NoPCH" }
 
     filter "system:windows"
         systemversion "latest"
@@ -57,7 +63,8 @@ project "Anomaly"
         defines
         {
             "ANOM_PLATFORM_WINDOWS",
-            "ANOM_BUILD_DLL"
+            "ANOM_BUILD_DLL",
+            "GLFW_INCLUDE_NONE"
         }
 
     filter "configurations:Debug"

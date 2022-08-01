@@ -1,3 +1,4 @@
+#include "anompch.h"
 #include "Log.h"
 
 #include "spdlog/spdlog.h"
@@ -8,13 +9,13 @@
 
 namespace Anomaly
 {
-	struct InternalLogger
+	struct LoggerState
 	{
-		std::shared_ptr<spdlog::logger> s_CoreLogger;
-		std::shared_ptr<spdlog::logger> s_ClientLogger;
+		std::shared_ptr<spdlog::logger> CoreLogger;
+		std::shared_ptr<spdlog::logger> ClientLogger;
 	};
 
-	static InternalLogger internalLogger;
+	static LoggerState s_State;
 
 	bool InitializaLogging()
 	{
@@ -25,15 +26,15 @@ namespace Anomaly
 		logSinks[0]->set_pattern("%^[%T] %n: %v%$");
 		logSinks[1]->set_pattern("[%T] [%l] %n: %v");
 
-		internalLogger.s_CoreLogger = std::make_shared<spdlog::logger>("Anomaly", begin(logSinks), end(logSinks));
-		spdlog::register_logger(internalLogger.s_CoreLogger);
-		internalLogger.s_CoreLogger->set_level(spdlog::level::trace);
-		internalLogger.s_CoreLogger->flush_on(spdlog::level::trace);
+		s_State.CoreLogger = std::make_shared<spdlog::logger>("Anomaly", begin(logSinks), end(logSinks));
+		spdlog::register_logger(s_State.CoreLogger);
+		s_State.CoreLogger->set_level(spdlog::level::trace);
+		s_State.CoreLogger->flush_on(spdlog::level::trace);
 
-		internalLogger.s_ClientLogger = std::make_shared<spdlog::logger>("APP", begin(logSinks), end(logSinks));
-		spdlog::register_logger(internalLogger.s_ClientLogger);
-		internalLogger.s_ClientLogger->set_level(spdlog::level::trace);
-		internalLogger.s_ClientLogger->flush_on(spdlog::level::trace);
+		s_State.ClientLogger = std::make_shared<spdlog::logger>("APP", begin(logSinks), end(logSinks));
+		spdlog::register_logger(s_State.ClientLogger);
+		s_State.ClientLogger->set_level(spdlog::level::trace);
+		s_State.ClientLogger->flush_on(spdlog::level::trace);
 
 		return true;
 	}
@@ -46,7 +47,7 @@ namespace Anomaly
 	{
 		const char* level_strings[6] = {"[ERROR]: ", "[WARN]: ", "[INFO]: ", "[DEBUG]: ", "[TRACE]: " };
 
-		const uint32_t msg_length = 32000;
+		const i32 msg_length = 32000;
 		char out_message[msg_length];
 		memset(out_message, 0, sizeof(out_message));
 
@@ -61,19 +62,19 @@ namespace Anomaly
 		switch (level)
 		{
 		case log_level::LOG_LEVEL_ERROR:
-			internalLogger.s_ClientLogger->error(out_message2);
+			s_State.ClientLogger->error(out_message2);
 			break;
 		case log_level::LOG_LEVEL_WARN:
-			internalLogger.s_ClientLogger->warn(out_message2);
+			s_State.ClientLogger->warn(out_message2);
 			break;
 		case log_level::LOG_LEVEL_INFO:
-			internalLogger.s_ClientLogger->info(out_message2);
+			s_State.ClientLogger->info(out_message2);
 			break;
 		case log_level::LOG_LEVEL_DEBUG:
-			internalLogger.s_ClientLogger->debug(out_message2);
+			s_State.ClientLogger->debug(out_message2);
 			break;
 		case log_level::LOG_LEVEL_TRACE:
-			internalLogger.s_ClientLogger->trace(out_message2);
+			s_State.ClientLogger->trace(out_message2);
 			break;
 		}
 	}
@@ -82,7 +83,7 @@ namespace Anomaly
 	{
 		const char* level_strings[6] = {"[ERROR]: ", "[WARN]: ", "[INFO]: ", "[DEBUG]: ", "[TRACE]: " };
 
-		const uint32_t msg_length = 32000;
+		const i32 msg_length = 32000;
 		char out_message[msg_length];
 		memset(out_message, 0, sizeof(out_message));
 
@@ -97,19 +98,19 @@ namespace Anomaly
 		switch (level)
 		{
 		case log_level::LOG_LEVEL_ERROR:
-			internalLogger.s_CoreLogger->error(out_message2);
+			s_State.CoreLogger->error(out_message2);
 			break;
 		case log_level::LOG_LEVEL_WARN:
-			internalLogger.s_CoreLogger->warn(out_message2);
+			s_State.CoreLogger->warn(out_message2);
 			break;
 		case log_level::LOG_LEVEL_INFO:
-			internalLogger.s_CoreLogger->info(out_message2);
+			s_State.CoreLogger->info(out_message2);
 			break;
 		case log_level::LOG_LEVEL_DEBUG:
-			internalLogger.s_CoreLogger->debug(out_message2);
+			s_State.CoreLogger->debug(out_message2);
 			break;
 		case log_level::LOG_LEVEL_TRACE:
-			internalLogger.s_CoreLogger->trace(out_message2);
+			s_State.CoreLogger->trace(out_message2);
 			break;
 		}
 	}
