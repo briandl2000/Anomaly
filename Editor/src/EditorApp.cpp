@@ -1,6 +1,9 @@
 #include <Anomaly.h>
 #include <Core/EntryPoint.h>
 
+#include "Game/Game.h"
+
+
 class EditorApp : public Anomaly::Application
 {
 public:
@@ -22,6 +25,7 @@ Anomaly::Application* Anomaly::CreateApplication()
 	config.Width = 900;
 	config.Height = 600;
 	config.Title = "EditorApp";
+	config.Game = CreateGame();
 
 	return new EditorApp(config);
 }

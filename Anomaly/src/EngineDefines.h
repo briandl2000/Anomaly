@@ -46,6 +46,12 @@ STATIC_ASSERT(sizeof(f64) == 8, "Expected f64 to be 8 byte.");
 #define ANOM_API __declspec(dllimport)
 #endif
 
+#if GAME_BUILD_DLL
+#define GAME_API __declspec(dllexport)
+#else
+#define GAME_API __declspec(dllimport)
+#endif
+
 #define BIT(x) (1 << x)
 
 #ifdef ANOM_DEBUG

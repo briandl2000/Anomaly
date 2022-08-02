@@ -4,6 +4,8 @@
 #include "Events/ApplicationEvent.h"
 #include "Events/Event.h"
 
+class Game;
+
 namespace Anomaly {
 
 	#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
@@ -13,6 +15,8 @@ namespace Anomaly {
 		char* Title;
 		u32 Width;
 		u32 Height;
+
+		Anomaly::Ref<Game> Game;
 	};
 
 	class Application
@@ -35,6 +39,7 @@ namespace Anomaly {
 
 	private:
 		b8 m_Running = TRUE;
+		Ref<Game> m_Game;
 
 	private:
 		static Application* s_Instance;

@@ -17,14 +17,12 @@ namespace Anomaly
 		ANOM_CORE_ERROR("GLFW Error (%l): %s", error, description);
 	}
 
-	Window::Window(const WindowProps& props)
+	Window::Window()
 	{
-		Init(props);
 	}
 
 	Window::~Window()
 	{
-		ShutDown();
 	}
 
 	u32 Window::GetWidth()
@@ -158,7 +156,7 @@ namespace Anomaly
 
 	}
 
-	void Window::ShutDown()
+	void Window::Shutdown()
 	{
 		ANOM_CORE_INFO("Shutting down Window...");
 	}

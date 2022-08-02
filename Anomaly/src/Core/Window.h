@@ -20,7 +20,7 @@ namespace Anomaly
 	public:
 		using EventCallbackFn = std::function<void(Event&)>;
 
-		Window(const WindowProps& props);
+		Window();
 		~Window();
 
 		u32 GetWidth();
@@ -29,9 +29,8 @@ namespace Anomaly
 
 		void SetEventCallback(const EventCallbackFn& callback) { m_Data.EventCallback = callback; };
 
-	private:
 		void Init(const WindowProps& props);
-		void ShutDown();
+		void Shutdown();
 	private:
 		GLFWwindow* m_Window;
 		struct WindowData

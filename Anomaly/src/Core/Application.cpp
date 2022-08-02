@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "Window.h"
 #include "Events/ApplicationEvent.h"
+#include "Game/Game.h"
 
 namespace Anomaly
 {
@@ -26,11 +27,20 @@ namespace Anomaly
 		props.Width = appConfig.Width;
 		props.Height = appConfig.Height;
 
-		s_State.Window = CreateScope<Window>(props);
-
+		s_State.Window = CreateScope<Window>();
+		s_State.Window->Init(props);
 		s_State.Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
+		ANOM_CORE_INFO("Creating Game...");
+
+		m_Game = appConfig.Game;// GetGame();
+		m_Game->Init();
+
+		ANOM_CORE_INFO("Game Created.");
+
 		ANOM_CORE_INFO("Application Created.");
+
+
 
 	}
 
@@ -47,6 +57,8 @@ namespace Anomaly
 		while(m_Running)
 		{
 			s_State.Window->OnUpdate();
+
+			m_Game->Update();
 		}
 		
 	}
@@ -68,8 +80,9 @@ namespace Anomaly
 	{
 		ANOM_CORE_INFO("Shutting down Application...");
 
-		s_State.Window = nullptr;
+		m_Game->Shutdown();
 
+		s_State.Window->Shutdown();
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& e)

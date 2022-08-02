@@ -13,4 +13,6 @@ int main(int argc, char** argv)
 	delete app;
 
 	Anomaly::ShutdownLogging();
+
+	return 0; 
 }

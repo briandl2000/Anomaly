@@ -5,3 +5,4 @@ bin-int
 *.user
 *.sln
 Editor/Anomaly.log
+*.filters

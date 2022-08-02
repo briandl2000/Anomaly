@@ -41,7 +41,8 @@ project "Anomaly"
 
     defines
     {
-        "_CRT_SECURE_NO_WARNINGS"
+        "_CRT_SECURE_NO_WARNINGS",
+        "ANOM_ENGINE"
     }
 
     includedirs
@@ -102,7 +103,8 @@ project "Game_Content"
 
     includedirs 
     {
-        "Anomaly/src"
+        "Anomaly/src",
+        "Game_Content/src"
     }
 
     links
@@ -162,7 +164,8 @@ project "Game_Executable"
     includedirs 
     {
         "Anomaly/src",
-        "Game_Content/src"
+        "Game_Content/src",
+        "Game_Executable/src"
     }
 
     links
@@ -221,7 +224,8 @@ project "Editor"
     includedirs 
     {
         "Anomaly/src",
-        "Game_Content/src"
+        "Game_Content/src",
+        "Editor/src"
     }
 
     links
