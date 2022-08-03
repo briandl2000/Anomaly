@@ -4,7 +4,3 @@
 [submodule "Anomaly\\Vendor\\glfw"]
 	path = Anomaly\\Vendor\\glfw
 	url = https://github.com/briandl2000/glfw
-[submodule "Anomaly/Vendor/imgui"]
-	path = Anomaly/Vendor/imgui
-	url = https://github.com/briandl2000/imgui
-	branch = docking
