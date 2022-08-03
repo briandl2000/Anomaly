@@ -1,6 +1,9 @@
-[submodule "Anomaly\\Vendor\\spdlog"]
-	path = Anomaly\\Vendor\\spdlog
+[submodule "Anomaly/Vendor/spdlog"]
+	path = Anomaly/Vendor/spdlog
 	url = https://github.com/briandl2000/spdlog
-[submodule "Anomaly\\Vendor\\glfw"]
-	path = Anomaly\\Vendor\\glfw
+[submodule "Anomaly/Vendor/glfw"]
+	path = Anomaly/Vendor/glfw
 	url = https://github.com/briandl2000/glfw
+[submodule "Anomaly/Vendor/Imgui"]
+	path = Anomaly/Vendor/Imgui
+	url = https://github.com/briandl2000/imgui/tree/docking
