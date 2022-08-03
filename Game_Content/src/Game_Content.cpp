@@ -18,7 +18,7 @@ namespace Game_Content
 
 	void Game_Content::Update()
 	{
-		//ANOM_DEBUG("Game_Content Update");
+		
 	}
 
 	void Game_Content::Shutdown()

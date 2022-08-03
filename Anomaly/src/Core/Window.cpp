@@ -5,6 +5,8 @@
 #include "Application.h"
 #include "Events/KeyEvent.h"
 #include "Events/MouseEvent.h"
+
+#define GLFW_INCLUDE_VULKAN
 #include "GLFW/glfw3.h"
 
 
@@ -56,6 +58,9 @@ namespace Anomaly
 			glfwSetErrorCallback(GLFWErrorCallback);
 			s_GLFWInitialized = TRUE;
 		}
+
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
 		m_Window = glfwCreateWindow(m_Data.Width, m_Data.Height, m_Data.Title, nullptr, nullptr);
 

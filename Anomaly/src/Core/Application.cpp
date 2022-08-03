@@ -3,6 +3,7 @@
 #include "Window.h"
 #include "Events/ApplicationEvent.h"
 #include "Game/Game.h"
+#include "Renderer/Renderer.h"
 
 namespace Anomaly
 {
@@ -19,9 +20,13 @@ namespace Anomaly
 	{
 		ANOM_CORE_INFO("Creating Application...");
 
+		// Create Instance ---------------------------------------------------------
 		ANOM_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
+		// -------------------------------------------------------------------------
 
+
+		// Create Window -----------------------------------------------------------
 		WindowProps props;
 		props.Title = appConfig.Title;
 		props.Width = appConfig.Width;
@@ -30,17 +35,27 @@ namespace Anomaly
 		s_State.Window = CreateScope<Window>();
 		s_State.Window->Init(props);
 		s_State.Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
+		// -------------------------------------------------------------------------
 
+
+		// Init Renderer -----------------------------------------------------------
+
+		Renderer::Init();
+
+		// -------------------------------------------------------------------------
+
+
+		// Init Renderer -----------------------------------------------------------
 		ANOM_CORE_INFO("Creating Game...");
 
 		m_Game = appConfig.Game;// GetGame();
 		m_Game->Init();
 
 		ANOM_CORE_INFO("Game Created.");
+		// -------------------------------------------------------------------------
+
 
 		ANOM_CORE_INFO("Application Created.");
-
-
 
 	}
 
@@ -81,6 +96,8 @@ namespace Anomaly
 		ANOM_CORE_INFO("Shutting down Application...");
 
 		m_Game->Shutdown();
+
+		Renderer::Shutdown();
 
 		s_State.Window->Shutdown();
 	}

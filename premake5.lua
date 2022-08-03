@@ -33,6 +33,12 @@ project "Anomaly"
     pchheader "anompch.h"
     pchsource "Anomaly/src/anompch.cpp"
 
+    postbuildcommands 
+    {
+        '{COPY} "../bin/' .. outputdir .. '/%{prj.name}/*.dll"  "../bin/' .. outputdir .. '/Game_Executable"',
+        '{COPY} "../bin/' .. outputdir .. '/%{prj.name}/*.dll"  "../bin/' .. outputdir .. '/Editor"'
+    }
+
     files 
     {
         "%{prj.name}/src/**.h",
@@ -50,11 +56,13 @@ project "Anomaly"
         "%{prj.name}/src",
         "%{prj.name}/vendor/spdlog/include",
         "%{IncludeDir.glfw}",
+        "$(VULKAN_SDK)/include"
     }
 
     links
     {
         "GLFW",
+        "$(VULKAN_SDK)/lib/vulkan-1.lib"
     }
 
 
@@ -94,6 +102,12 @@ project "Game_Content"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+    postbuildcommands 
+    {
+        '{COPY} "../bin/' .. outputdir .. '/%{prj.name}/*.dll"  "../bin/' .. outputdir .. '/Game_Executable"',
+        '{COPY} "../bin/' .. outputdir .. '/%{prj.name}/*.dll"  "../bin/' .. outputdir .. '/Editor"'
+    }
 
     files 
     {
@@ -147,13 +161,6 @@ project "Game_Executable"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-
-
-    postbuildcommands 
-    {
-        '{COPY} "../bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/Anomaly/Anomaly.dll"  "../bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/%{prj.name}"',
-        '{COPY} "../bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/Game_Content/Game_Content.dll"  "../bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/%{prj.name}"'
-    }
 
     files 
     {
@@ -209,11 +216,6 @@ project "Editor"
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-    postbuildcommands 
-    {
-        '{COPY} "../bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/Anomaly/Anomaly.dll"  "../bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/%{prj.name}"',
-        '{COPY} "../bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/Game_Content/Game_Content.dll"  "../bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/%{prj.name}"'
-    }
 
     files 
     {
