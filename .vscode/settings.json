@@ -116,7 +116,8 @@
         "stop_token": "cpp",
         "thread": "cpp",
         "unordered_map": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "xhash": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 } 

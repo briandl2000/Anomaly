@@ -8,7 +8,7 @@
             "program": "${workspaceFolder}/build/AnomalyEditor/AnomalyEditor.exe",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${fileDirname}",
+            "cwd": "${workspaceFolder}/WorkingDir",
             "environment": [],
             "console": "externalTerminal"
         }
