@@ -6,11 +6,12 @@
 
 #define LOG_WARN_ENABLED 1
 #define LOG_INFO_ENABLED 1
-#define LOG_DEBUG_ENABLED 1
-#define LOG_TRACE_ENABLED 1
 
 // Disable debug and trace logging for release builds.
-#ifdef ARELEASE
+#ifdef DEBUG
+#define LOG_DEBUG_ENABLED 1
+#define LOG_TRACE_ENABLED 1
+#else
 #define LOG_DEBUG_ENABLED 0
 #define LOG_TRACE_ENABLED 0
 #endif
@@ -29,7 +30,7 @@ namespace Anomaly::logger
 
     bool Initialize();
     void Shutdown();
-    ANOM_API void LogOutput(eLogLevel level, AString message, ...);
+    void LogOutput(eLogLevel level, AString message, ...);
 
 }
 

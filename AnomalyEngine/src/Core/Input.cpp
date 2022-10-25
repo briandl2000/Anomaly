@@ -101,7 +101,7 @@ namespace Anomaly::input
         event::FireEvent(event::eSystemEventCode::EVENT_CODE_MOUSE_WHEEL, data);
     }
 
-    ANOM_API bool IsKeyDown(eKeys key)
+    bool IsKeyDown(eKeys key)
     {
         if(!s_State)
             return false;
@@ -109,7 +109,7 @@ namespace Anomaly::input
         return s_State->currentKeyboard.keys[key] == true; 
     }
 
-    ANOM_API bool IsKeyUp(eKeys key)
+    bool IsKeyUp(eKeys key)
     {
         if(!s_State)
             return true;
@@ -117,7 +117,7 @@ namespace Anomaly::input
         return s_State->currentKeyboard.keys[key] == false;
     }
 
-    ANOM_API bool WasKeyDown(eKeys key)
+    bool WasKeyDown(eKeys key)
     {
         if(!s_State)
             return false;
@@ -125,7 +125,7 @@ namespace Anomaly::input
         return s_State->previousKeyboard.keys[key] == true;
     }
 
-    ANOM_API bool WasKeyUp(eKeys key)
+    bool WasKeyUp(eKeys key)
     {
         if(!s_State)
             return true;
@@ -134,7 +134,7 @@ namespace Anomaly::input
     }
 
 
-    ANOM_API bool IsButtonDown(eMouseButtons button)
+    bool IsButtonDown(eMouseButtons button)
     {
         if(!s_State)
             return false;
@@ -142,7 +142,7 @@ namespace Anomaly::input
         return s_State->currentMouse.buttons[button] == true;
     }
 
-    ANOM_API bool IsButtonUp(eMouseButtons button)
+    bool IsButtonUp(eMouseButtons button)
     {
         if(!s_State)
             return true;
@@ -150,7 +150,7 @@ namespace Anomaly::input
         return s_State->currentMouse.buttons[button] == false;
     }
 
-    ANOM_API bool WasButtonDown(eMouseButtons button)
+    bool WasButtonDown(eMouseButtons button)
     {
         if(!s_State)
             return false;
@@ -158,7 +158,7 @@ namespace Anomaly::input
         return s_State->previousMouse.buttons[button] == true;
     }
 
-    ANOM_API bool WasButtonUp(eMouseButtons button)
+    bool WasButtonUp(eMouseButtons button)
     {
         if(!s_State)
             return true;
@@ -167,7 +167,7 @@ namespace Anomaly::input
     }
 
 
-    ANOM_API void GetMousePosition(i32* x, i32* y)
+    void GetMousePosition(i32* x, i32* y)
     {
         if(!s_State)
         {
@@ -179,7 +179,7 @@ namespace Anomaly::input
         *y = s_State->currentMouse.y;
     }
 
-    ANOM_API void GetPreviousMousePosition(i32* x, i32* y)
+    void GetPreviousMousePosition(i32* x, i32* y)
     {
         if(!s_State)
         {

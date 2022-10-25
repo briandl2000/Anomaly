@@ -187,9 +187,9 @@ namespace Anomaly::graphics::d3d12::core
         {
             ADEBUG("    Adapter: %u", i);
             ADEBUG("        Description: %ls",              adapterDesc.Description);
-            ADEBUG("        DedicatedVideoMemory: %.2f%s",  GetMemorySizeFloat(adapterDesc.DedicatedVideoMemory), GetMemorySizeUnit(adapterDesc.DedicatedVideoMemory).c_str());
-            ADEBUG("        DedicatedSystemMemory: %.2f%s", GetMemorySizeFloat(adapterDesc.DedicatedSystemMemory), GetMemorySizeUnit(adapterDesc.DedicatedSystemMemory).c_str());
-            ADEBUG("        SharedSystemMemory: %.2f%s",    GetMemorySizeFloat(adapterDesc.SharedSystemMemory), GetMemorySizeUnit(adapterDesc.SharedSystemMemory).c_str());
+            ADEBUG("        DedicatedVideoMemory: %.2f%s",  GetMemorySizeFloat((u32)adapterDesc.DedicatedVideoMemory), GetMemorySizeUnit((u32)adapterDesc.DedicatedVideoMemory).c_str());
+            ADEBUG("        DedicatedSystemMemory: %.2f%s", GetMemorySizeFloat((u32)adapterDesc.DedicatedSystemMemory), GetMemorySizeUnit((u32)adapterDesc.DedicatedSystemMemory).c_str());
+            ADEBUG("        SharedSystemMemory: %.2f%s",    GetMemorySizeFloat((u32)adapterDesc.SharedSystemMemory), GetMemorySizeUnit((u32)adapterDesc.SharedSystemMemory).c_str());
         }
 
         constexpr DXGI_FORMAT c_RenderTragetFormat{DXGI_FORMAT_R8G8B8A8_UNORM_SRGB};

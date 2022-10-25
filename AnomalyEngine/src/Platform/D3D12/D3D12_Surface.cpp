@@ -120,8 +120,8 @@ namespace Anomaly::graphics::d3d12
 
         m_ViewPort.TopLeftX = 0.f;
         m_ViewPort.TopLeftY = 0.f;
-        m_ViewPort.Width = width;
-        m_ViewPort.Height = height;
+        m_ViewPort.Width = (float)width;
+        m_ViewPort.Height = (float)height;
         m_ViewPort.MinDepth = 0.f;
         m_ViewPort.MaxDepth = 1.f;
 

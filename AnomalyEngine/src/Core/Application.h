@@ -16,7 +16,7 @@ namespace Anomaly
     }
 
     // Application class
-    class ANOM_API Application
+    class Application
     {
         ADD_EVENT_LISTENERS(Application)
     public:

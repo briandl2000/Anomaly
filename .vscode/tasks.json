@@ -5,17 +5,67 @@
             "type": "shell",
             "label": "Build Everything",
             "windows": {
-                "command": "${workspaceFolder}/build.bat",
+                "command": "${workspaceFolder}/Commands/BuildAll.bat",
             },
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${workspaceFolder}/Commands"
             },
             "problemMatcher": [
-                "$gcc"
+                "$msCompile"
             ],
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Build Debug",
+            "windows": {
+                "command": "${workspaceFolder}/Commands/BuildDebug.bat",
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/Commands"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Build Release",
+            "windows": {
+                "command": "${workspaceFolder}/Commands/BuildRelease.bat",
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/Commands"
+            },
+            "problemMatcher": [ 
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Clean",
+            "windows": {
+                "command": "${workspaceFolder}/Commands/Clean.bat",
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/Commands"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "none",
             }
         },
     ]

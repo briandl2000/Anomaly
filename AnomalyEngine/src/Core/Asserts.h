@@ -15,7 +15,7 @@
 
 namespace Anomaly::logger
 {
-    ANOM_API void ReportAssertionFailure(const char* expression, const char* message, const char* file, i32 line);
+    void ReportAssertionFailure(const char* expression, const char* message, const char* file, i32 line);
 }
 
 #define AASSERT(expr)                                                \

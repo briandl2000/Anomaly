@@ -21,7 +21,7 @@ namespace Anomaly::graphics
 
     void Shutdown();
 
-    ANOM_API void RenderSurface(Window* windowIndex);
+    void RenderSurface(Window* windowIndex);
     
     Surface* CreateSurface(Window* windowIndex);
     void DestroySurface(Window* windowIndex);

@@ -4,7 +4,8 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/AnomalyEngine/src/**",
-                "${workspaceFolder}/AnomalyEditor/src/**"
+                "${workspaceFolder}/AnomalyEditor/src/**",
+                "${workspaceFolder}/ThirdParty/imgui/**"
             ],
             "defines": [
                 "DEBUG",
@@ -12,10 +13,10 @@
                 "ANOM_BUILD_DLL"
             ],
             "windowsSdkVersion": "10.0.18362.0",
-            "compilerPath": "C:\\Program Files\\LLVM\\bin\\clang.exe",
+            "compilerPath": "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\bin\\cl.exe",
             "cStandard": "c17",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "clang-x64"
+            "cppStandard": "c++20",
+            "intelliSenseMode": "${default}"
         }
     ],
     "version": 4

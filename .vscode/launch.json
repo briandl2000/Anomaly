@@ -2,10 +2,21 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(Windows) Launch",
+            "name": "(Windows) Launch Debug",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/AnomalyEditor/AnomalyEditor.exe",
+            "program": "${workspaceFolder}/build/bin/debug/AnomalyEditor.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/WorkingDir",
+            "environment": [],
+            "console": "externalTerminal"
+        },
+        {
+            "name": "(Windows) Launch Release",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/Release/AnomalyEditor.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/WorkingDir",

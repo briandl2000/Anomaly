@@ -151,20 +151,20 @@ namespace Anomaly::input
     void Shutdown();
     void Update(f64 deltaTime);
 
-    ANOM_API bool IsKeyDown(eKeys key);
-    ANOM_API bool IsKeyUp(eKeys key);
-    ANOM_API bool WasKeyDown(eKeys key);
-    ANOM_API bool WasKeyUp(eKeys key);
+    bool IsKeyDown(eKeys key);
+    bool IsKeyUp(eKeys key);
+    bool WasKeyDown(eKeys key);
+    bool WasKeyUp(eKeys key);
 
     void ProcessKey(eKeys key, bool pressed);
 
-    ANOM_API bool IsButtonDown(eMouseButtons button);
-    ANOM_API bool IsButtonUp(eMouseButtons button);
-    ANOM_API bool WasButtonDown(eMouseButtons button);
-    ANOM_API bool WasButtonUp(eMouseButtons button);
+    bool IsButtonDown(eMouseButtons button);
+    bool IsButtonUp(eMouseButtons button);
+    bool WasButtonDown(eMouseButtons button);
+    bool WasButtonUp(eMouseButtons button);
 
-    ANOM_API void GetMousePosition(i32* x, i32* y);
-    ANOM_API void GetPreviousMousePosition(i32* x, i32* y);
+    void GetMousePosition(i32* x, i32* y);
+    void GetPreviousMousePosition(i32* x, i32* y);
 
     void ProcessButton(eMouseButtons button, bool pressed);
     void PrcessMouseMove(i16 x, i16 y);

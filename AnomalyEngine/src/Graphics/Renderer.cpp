@@ -20,6 +20,9 @@ namespace Anomaly::graphics
             case GraphicsAPI::D3D12: return "D3D12";
             case GraphicsAPI::OpenGL: return "OpenGL";
             }
+
+            AASSERT("Unknown graphics API selected!");
+            return "";
         }
 
         struct RendererState

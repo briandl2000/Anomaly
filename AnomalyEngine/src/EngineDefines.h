@@ -37,12 +37,6 @@ STATIC_ASSERT(sizeof(f64) == 8, "Expected f64 to be 8 byte.");
 #define TRUE 1
 #define FALSE 0
 
-#if ANOM_BUILD_DLL
-#define ANOM_API __declspec(dllexport)
-#else
-#define ANOM_API __declspec(dllimport)
-#endif
-
 #define BIT(x) (1 << x)
 
 #ifdef ANOM_DEBUG

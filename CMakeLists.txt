@@ -1,30 +1,41 @@
 cmake_minimum_required(VERSION 3.0.0)
 
-project(ThirdParty)
-
-add_library(ImGui 
-            "ThirdParty/ImGui/imconfig.h" 
-            "ThirdParty/ImGui/imgui_demo.cpp"
-            "ThirdParty/ImGui/imgui_draw.cpp"
-            "ThirdParty/ImGui/imgui_internal.h"
-            "ThirdParty/ImGui/imgui_tables.cpp"
-            "ThirdParty/ImGui/imgui_widgets.cpp"
-            "ThirdParty/ImGui/imgui.cpp"
-            "ThirdParty/ImGui/imgui.h"
-            "ThirdParty/ImGui/imstb_rectpack.h"
-            "ThirdParty/ImGui/imstb_textedit.h"
-            "ThirdParty/ImGui/imstb_truetype.h"
-            )
-
-target_include_directories(ImGui PUBLIC "ThirdParty/ImGui")
-
-project(Anomaly VERSION 0.1.0)
-
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_TYPE debug)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
 
+set(OUTPUT_DIRECOTRY "${CMAKE_BINARY_DIR}/bin")
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${OUTPUT_DIRECOTRY}/debug")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "${OUTPUT_DIRECOTRY}/debug")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${OUTPUT_DIRECOTRY}/debug")
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${OUTPUT_DIRECOTRY}/release")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${OUTPUT_DIRECOTRY}/release")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${OUTPUT_DIRECOTRY}/release")
+
+if(WIN32)
+    add_compile_definitions(PLATFORM_WINDOWS)
+endif()
+
+add_compile_definitions(
+    PRIVATE
+        _CRT_SECURE_NO_WARNINGS
+    PUBLIC
+        $<$<CONFIG:Debug>:DEBUG>
+        $<$<CONFIG:RelWithDebInfo>:DEBUG>
+        $<$<CONFIG:Release>:RELEASE>
+        $<$<CONFIG:MinSizeRel>:RELEASE>
+    )
+
+add_subdirectory(ThirdParty)
+
+project(Anomaly VERSION 0.1.0)
 
 add_subdirectory(AnomalyEngine)
 add_subdirectory(AnomalyEditor)
+
+set(CPACK_INSTALL_CMAKE_PROJECTS
+    "debug;ALL;/"
+    "release;ALL;/"
+    )

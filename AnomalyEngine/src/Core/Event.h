@@ -56,9 +56,9 @@ namespace Anomaly::event
         virtual bool operator == (IEventCallback* other) = 0;
     };
 
-    ANOM_API void EventRegister(u32 code, IEventCallback* eventCallback);
-    ANOM_API void EventUnregister(u32 code, IEventCallback* eventCallback);
-    ANOM_API void FireEvent(u32 code, const EventData& data);
+    void EventRegister(u32 code, IEventCallback* eventCallback);
+    void EventUnregister(u32 code, IEventCallback* eventCallback);
+    void FireEvent(u32 code, const EventData& data);
 
     template<typename T>
     class EventCallback : public IEventCallback
