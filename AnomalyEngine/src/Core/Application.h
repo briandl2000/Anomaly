@@ -33,6 +33,11 @@ namespace Anomaly
 
         bool OnWindowClose(const event::EventData& data);
         bool OnWindowResize(const event::EventData& data);
+
+        virtual void OnImGui() {};
+
+        bool OnImGui(const event::EventData& data);
+
     private:
 
         bool m_ShouldClose{false};

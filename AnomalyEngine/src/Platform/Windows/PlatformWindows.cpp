@@ -4,6 +4,9 @@
 
 #include "CommonHeaders.h"
 
+#include "Platform/D3D12/imgui/imgui_impl_win32.h"
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 namespace Anomaly::platform
 {
     namespace
@@ -75,7 +78,7 @@ namespace Anomaly::platform
         WriteConsoleA(GetStdHandle(STD_OUTPUT_HANDLE), message, (DWORD)length, number_written, 0);
     }
 
-    HWND windows::CreateHWND(const AString& name, i32& x, i32& y, i32& width, i32& height, WindowsWindow* window) 
+    HWND windows::CreateHWND(const std::string& name, i32& x, i32& y, i32& width, i32& height, WindowsWindow* window) 
     {
         u32 windowStyle = WS_OVERLAPPED | WS_SYSMENU | WS_CAPTION;
         windowStyle |= WS_MAXIMIZEBOX;
@@ -111,6 +114,9 @@ namespace Anomaly::platform
     {
         LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
+             if (ImGui_ImplWin32_WndProcHandler(hwnd, uMsg, wParam, lParam))
+                return true;
+
             WindowsWindow* parentWindow = (WindowsWindow*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
             event::EventData data{};

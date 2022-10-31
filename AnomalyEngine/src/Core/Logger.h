@@ -2,7 +2,7 @@
 
 #include "EngineDefines.h"
 
-#include "DataStructures.h"
+#include <string>
 
 #define LOG_WARN_ENABLED 1
 #define LOG_INFO_ENABLED 1
@@ -30,8 +30,9 @@ namespace Anomaly::logger
 
     bool Initialize();
     void Shutdown();
-    void LogOutput(eLogLevel level, AString message, ...);
+    void LogOutput(eLogLevel level, std::string message, ...);
 
+    void ImGuiDraw();
 }
 
 #ifndef AFATAL

@@ -10,14 +10,14 @@ namespace Anomaly
 namespace Anomaly::graphics
 {
     class Surface;
-    enum class GraphicsAPI
+    enum class eGraphicsAPI
     {
         None = 0,
         D3D12,
         OpenGL
     };
 
-    bool Initialize(const GraphicsAPI& graphicsAPI = GraphicsAPI::None );
+    bool Initialize(const eGraphicsAPI& graphicsAPI);
 
     void Shutdown();
 
@@ -26,5 +26,5 @@ namespace Anomaly::graphics
     Surface* CreateSurface(Window* windowIndex);
     void DestroySurface(Window* windowIndex);
 
-    GraphicsAPI GetAPI();
+    eGraphicsAPI GetAPI();
 } 

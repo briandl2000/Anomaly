@@ -1,7 +1,9 @@
 #include "Event.h"
 
-#include "DataStructures.h"
 #include "Logger.h"
+
+#include <string>
+#include <vector>
 
 namespace Anomaly::event
 {
@@ -59,7 +61,7 @@ namespace Anomaly::event
                 }
             }
         private:
-            typedef AVector<IEventCallback*> CallbackArray;
+            typedef std::vector<IEventCallback*> CallbackArray;
             CallbackArray m_EventCallbacks;
         };
 

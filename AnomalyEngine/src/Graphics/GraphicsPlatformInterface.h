@@ -14,8 +14,8 @@ namespace Anomaly::graphics
     {
         bool (*Initialize)();
         void (*Shutdown)();
-        void (*RenderSurface)(Window* winodwIndex);
-        Surface* (*CreateSurface)(Window* winodwIndex);
-        void (*DestroySurface)(Window* winodwIndex);
+        void (*RenderSurface)(Window* windowIndex);
+        Surface* (*CreateSurface)(Window* windowIndex);
+        void (*DestroySurface)(Window* windowIndex);
     };
 }

@@ -14,7 +14,7 @@ namespace Anomaly::graphics::d3d12
         D3D12_Surface(Window* window);
         virtual ~D3D12_Surface();
 
-        virtual void Resize(u32 width, u32 height)  override;
+        virtual void Resize()  override;
         virtual void SwapBuffers() override;
         virtual u32 GetWidth() override;
         virtual u32 GetHeight() override;

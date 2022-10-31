@@ -7,6 +7,8 @@
 
 #include "Input.h"
 
+#include "imgui.h"
+
 namespace Anomaly
 {
     Application::Application()
@@ -36,13 +38,15 @@ namespace Anomaly
         }
 
         AINFO("Initializing the event graphics system...");
-        if(!graphics::Initialize(graphics::GraphicsAPI::D3D12))
+        // TODO: initialize graphics based on platform
+        if(!graphics::Initialize(graphics::eGraphicsAPI::D3D12))
         {
             AERROR("Renderer System Failed to initialize!");
         }
         
         AddEventListener(event::eSystemEventCode::EVENT_CODE_WINDOW_CLOSED, &Application::OnWindowClose);
         AddEventListener(event::eSystemEventCode::EVENT_CODE_RESIZED, &Application::OnWindowResize);
+        AddEventListener(event::eSystemEventCode::EVENT_CODE_IMGUI_EVENT, &Application::OnImGui);
 
         m_Window = Window::CreateWin({"My Window", 900, 600, 100, 100});
     }
@@ -71,6 +75,8 @@ namespace Anomaly
         while(!m_ShouldClose)
         {
             platform::PumpMessage();
+            if(m_ShouldClose)
+                break;
 
             OnUpdate();
 
@@ -93,4 +99,11 @@ namespace Anomaly
         //AINFO("Window: %s reisized to %i width and %i height", window->GetName().c_str(), window->GetWidth(), window->GetHeight());
         return true;
     }
+
+    bool Application::OnImGui(const event::EventData& data) 
+    {
+        OnImGui();
+
+        return true;
+    };
 }

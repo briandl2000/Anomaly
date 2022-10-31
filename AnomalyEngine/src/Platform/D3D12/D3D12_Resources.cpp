@@ -52,7 +52,7 @@ namespace Anomaly::graphics::d3d12
         std::lock_guard lock{m_Mutex};
         AASSERT(frameIndex < c_FrameBufferCount);
 
-        AVector<u32>& indices{ m_DeferredFreeIndices[frameIndex]};
+        std::vector<u32>& indices{ m_DeferredFreeIndices[frameIndex]};
         if(!indices.empty())
         {
             for(auto index : indices)

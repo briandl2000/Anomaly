@@ -2,7 +2,6 @@
 
 #include "EngineDefines.h"
 
-#include "Core/DataStructures.h"
 
 namespace Anomaly::event
 {
@@ -17,6 +16,8 @@ namespace Anomaly::event
         EVENT_CODE_MOUSE_MOVED = 0x06,
         EVENT_CODE_MOUSE_WHEEL = 0x07,
         EVENT_CODE_RESIZED = 0x08,
+
+        EVENT_CODE_IMGUI_EVENT = 0x09,
 
         MAX_EVENT_CODE = 0xFF
     };
@@ -104,7 +105,7 @@ namespace Anomaly::event
 #define ADD_EVENT_LISTENERS(className)                                                                  \
 private:                                                                                                \
 typedef Anomaly::event::EventCallback<className> EventListener;                                         \
-AVector<Anomaly::Ref<EventListener>> m_EventListeners;                                                  \
+std::vector<Anomaly::Ref<EventListener>> m_EventListeners;                                                  \
 void AddEventListener(u32 code, bool(className::*callback)(const Anomaly::event::EventData& data))      \
 {                                                                                                       \
     m_EventListeners.push_back(                                                                         \

@@ -18,7 +18,7 @@ namespace Anomaly
 
         virtual i32 GetWidth() override;
         virtual i32 GetHeight() override;
-        virtual AString GetName() override;
+        virtual std::string GetName() override;
 
         void Resize(u32 width, u32 height);
 
@@ -33,7 +33,7 @@ namespace Anomaly
         i32 m_X;
         i32 m_Y;
 
-        AString m_Name;
+        std::string m_Name;
 
         graphics::Surface* m_Surface{nullptr};
     };

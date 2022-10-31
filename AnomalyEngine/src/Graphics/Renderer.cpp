@@ -12,13 +12,13 @@ namespace Anomaly::graphics
 {
     namespace 
     {
-        AString GraphicsAPIToString(const GraphicsAPI& graphicsAPI)
+        std::string GraphicsAPIToString(const eGraphicsAPI& graphicsAPI)
         {
             switch (graphicsAPI)
             {
-            case GraphicsAPI::None: return "None";
-            case GraphicsAPI::D3D12: return "D3D12";
-            case GraphicsAPI::OpenGL: return "OpenGL";
+            case eGraphicsAPI::None: return "None";
+            case eGraphicsAPI::D3D12: return "D3D12";
+            case eGraphicsAPI::OpenGL: return "OpenGL";
             }
 
             AASSERT("Unknown graphics API selected!");
@@ -27,7 +27,7 @@ namespace Anomaly::graphics
 
         struct RendererState
         {
-            GraphicsAPI SelectedAPI{GraphicsAPI::None};
+            eGraphicsAPI SelectedAPI{eGraphicsAPI::None};
 
             GraphicsPlatformInterface gfx;
         };
@@ -43,7 +43,7 @@ namespace Anomaly::graphics
                 AERROR("Graphics API: %s is not supported!", GraphicsAPIToString(s_State->SelectedAPI).c_str());
                 return false;
             }
-            case GraphicsAPI::D3D12:
+            case eGraphicsAPI::D3D12:
             {
                 #ifdef PLATFORM_WINDOWS
                 d3d12::GetGraphicsPlatfromInterface(s_State->gfx);
@@ -55,7 +55,7 @@ namespace Anomaly::graphics
         }
     }
 
-    bool Initialize(const GraphicsAPI& graphicsAPI) 
+    bool Initialize(const eGraphicsAPI& graphicsAPI) 
     {
         s_State = CreateScope<RendererState>();
         s_State->SelectedAPI = graphicsAPI;
@@ -91,7 +91,7 @@ namespace Anomaly::graphics
         }
     }
 
-    GraphicsAPI GetAPI() 
+    eGraphicsAPI GetAPI() 
     {
         return s_State->SelectedAPI;
     }

@@ -1,16 +1,18 @@
 {
     "configurations": [
         {
-            "name": "Win32",
+            "name": "Win32 Debug",
             "includePath": [
                 "${workspaceFolder}/AnomalyEngine/src/**",
                 "${workspaceFolder}/AnomalyEditor/src/**",
                 "${workspaceFolder}/ThirdParty/imgui/**"
             ],
+            // "customConfigurationVariables": {
+
+            // },
             "defines": [
                 "DEBUG",
-                "PLATFORM_WINDOWS",
-                "ANOM_BUILD_DLL"
+                "PLATFORM_WINDOWS"
             ],
             "windowsSdkVersion": "10.0.18362.0",
             "compilerPath": "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\bin\\cl.exe",

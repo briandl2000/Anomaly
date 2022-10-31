@@ -3,99 +3,121 @@
 #include "CommonHeaders.h"
 #include "Platform/Window.h"
 #include "Graphics/Renderer.h"
+#include "Graphics/Texture.h"
+
+#include "imgui.h"
 
 namespace Anomaly
 {
-    class Test
-    {
-        ADD_EVENT_LISTENERS(Test)
-    public:
-        Test(int pos)
-        {
-            AddEventListener(event::eSystemEventCode::EVENT_CODE_RESIZED, &Test::ResizeCallback);
-            AddEventListener(event::eSystemEventCode::EVENT_CODE_WINDOW_CLOSED, &Test::WindowCloseCallback);
-            m_Window = Window::CreateWin({"Test Window", 200, 200, pos, pos});
-        }
-        ~Test() 
-        {
-            m_Window = nullptr;
-        }
-
-        bool ResizeCallback(const event::EventData& data)
-        {
-            return false;
-        }
-        bool WindowCloseCallback(const event::EventData& data)
-        {
-            if(data.sender == m_Window.get())
-            {
-                m_Window = nullptr;
-            }
-            return false;
-        }
-
-        void Render()
-        {
-            graphics::RenderSurface(m_Window.get());
-        }
-    private:
-
-        Ref<Window> m_Window{nullptr};
-
-    };
-
     class EditorApp : public Application
     {
-        ADD_EVENT_LISTENERS(EditorApp)
     public:
-        EditorApp()
+        EditorApp(int argc, char** argv)
         {
-            AddEventListener(event::eSystemEventCode::EVENT_CODE_KEY_PRESSED, &EditorApp::KeyPressedCallback);
+            for(int i = 0; i < argc; i++)
+            {
+                ADEBUG("Arg %i: %s", i, argv[i]);
+            }
+
+            texture = graphics::Texture::CreateTexture("");
         }
 
         virtual ~EditorApp() override
         {
         }
-        
-        virtual void OnUpdate() override
-        {
-            for(auto& test : tests)
-            {
-                test.Render();
-            }
-        }
 
-        bool KeyPressedCallback(const event::EventData& data)
+        virtual void OnImGui()
         {
-            if(data.data.u16[0] == input::eKeys::KEY_A)
+            static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+
+            ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+            
+            const ImGuiViewport* viewport = ImGui::GetMainViewport();
+            ImGui::SetNextWindowPos(viewport->WorkPos);
+            ImGui::SetNextWindowSize(viewport->WorkSize);
+            ImGui::SetNextWindowViewport(viewport->ID);
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+            window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+            window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+        
+            if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+                window_flags |= ImGuiWindowFlags_NoBackground;
+            
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+            ImGui::Begin("DockSpace Demo", nullptr, window_flags);
+            ImGui::PopStyleVar(3);
+
+            ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+            ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+
+            if (ImGui::BeginMenuBar())
             {
-                for(int i = 0; i < 10; i++)
+                if (ImGui::BeginMenu("File"))
                 {
-                    tests.push_back({pos});
-                    pos += 10;
+                    
+                    ImGui::EndMenu();
                 }
-            }
-            else if(data.data.u16[0] == input::eKeys::KEY_D)
-            {
-                if(tests.size() > 0)
+                if (ImGui::BeginMenu("View"))
                 {
-                    for(int i = 0; i < 10; i++)
-                    {
-                        tests.pop_back();
-                        pos -= 10;
+                    if (ImGui::MenuItem("Debug Info", "", debugInfoOpen))
+                    { 
+                        debugInfoOpen = !debugInfoOpen;
                     }
+
+
+                    ImGui::EndMenu();
                 }
+                
+                ImGui::EndMenuBar();
             }
-            return false;
+
+            ImGui::End();
+
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0., 0.));
+            ImGui::Begin("Viewport", nullptr, ImGuiWindowFlags_NoDecoration);
+            
+            ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+            ImGui::Image((ImTextureID)texture->GetHandle(), viewportPanelSize, ImVec2(0., 1.), ImVec2(1., 0.));
+            
+            ImGui::End();
+            ImGui::PopStyleVar();
+
+            ImGui::Begin("Scene hierarchy");
+            ImGui::End();
+
+            ImGui::Begin("Asset browser");
+            ImGui::End();
+
+            ImGui::Begin("Output logger");
+            static char inputText[128]{0};
+            ImGui::InputText("Filter", inputText, 128);
+            ImGui::Separator();
+            ImGui::BeginChild("logger", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
+            logger::ImGuiDraw();
+            if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
+                ImGui::SetScrollHereY(1.0f);
+            ImGui::EndChild();
+            ImGui::End();
+
+            ImGui::Begin("Properties");
+            ImGui::End();
+            
+            if(debugInfoOpen)
+            {
+                ImGui::Begin("Info", &debugInfoOpen);
+                ImGui::End();
+            }
         }
 
     private:
-        int pos = 100;
-        AVector<Test> tests{};
+        bool debugInfoOpen{false};
+
+        Ref<graphics::Texture> texture;
     };
 
 }
-Anomaly::Application* CreateApplication()
+Anomaly::Application* CreateApplication(int argc, char** argv)
 {
-    return new Anomaly::EditorApp();
+    return new Anomaly::EditorApp(argc, argv);
 }

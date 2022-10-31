@@ -43,4 +43,6 @@ namespace Anomaly::graphics::d3d12::core
     DescriptorHeap& GetDsvHeap();
     DescriptorHeap& GetSrvHeap();
     DescriptorHeap& GetUavHeap();
+
+    void UploadTextureData(ID3D12Resource* resource, D3D12_SUBRESOURCE_DATA* textureData);
 }

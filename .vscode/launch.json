@@ -6,9 +6,9 @@
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/bin/debug/AnomalyEditor.exe",
-            "args": [],
+            "args": ["${workspaceFolder}\\TestProject\\Test.aproject"],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/WorkingDir",
+            "cwd": "${workspaceFolder}\\TestProject",
             "environment": [],
             "console": "externalTerminal"
         },
@@ -17,11 +17,11 @@
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/bin/Release/AnomalyEditor.exe",
-            "args": [],
+            "args": ["${workspaceFolder}\\TestProject\\Test.aproject"],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/WorkingDir",
+            "cwd": "${workspaceFolder}\\TestProject",
             "environment": [],
-            "console": "externalTerminal"
+            "console": "integratedTerminal"
         }
     ]
 }

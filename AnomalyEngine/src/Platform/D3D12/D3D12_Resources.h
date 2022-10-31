@@ -62,7 +62,7 @@ namespace Anomaly::graphics::d3d12
         const D3D12_DESCRIPTOR_HEAP_TYPE m_Type{};
 
         Scope<u32[]> m_FreeHandles{};
-        AVector<u32> m_DeferredFreeIndices[c_FrameBufferCount]{};
+        std::vector<u32> m_DeferredFreeIndices[c_FrameBufferCount]{};
     };
 
 }

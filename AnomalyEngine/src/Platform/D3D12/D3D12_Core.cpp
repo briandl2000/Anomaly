@@ -11,11 +11,18 @@
 
 #include <unordered_map>
 
+#include "imgui/imgui_impl_dx12.h"
+#include "imgui/imgui_impl_win32.h"
+
+#include "Core/Event.h"
+
+#include "d3dx12.h"
+
 namespace Anomaly::graphics::d3d12::core
 {
 
     // TODO: REMOVE THIS TO A MEMORY SPECIFIC FILE
-    AString GetMemorySizeUnit(u32 size)
+    std::string GetMemorySizeUnit(u32 size)
     {
         const u64 gib = 1024 * 1024 * 1024;
         const u64 mib = 1024 * 1024;
@@ -59,6 +66,9 @@ namespace Anomaly::graphics::d3d12::core
 
     namespace 
     {
+        // TODO: Create a copy command for uploading data
+        // TODO: Create a compute command for compute shaders
+
         class D3D12_Command
         {
         public:
@@ -192,7 +202,7 @@ namespace Anomaly::graphics::d3d12::core
             ADEBUG("        SharedSystemMemory: %.2f%s",    GetMemorySizeFloat((u32)adapterDesc.SharedSystemMemory), GetMemorySizeUnit((u32)adapterDesc.SharedSystemMemory).c_str());
         }
 
-        constexpr DXGI_FORMAT c_RenderTragetFormat{DXGI_FORMAT_R8G8B8A8_UNORM_SRGB};
+        constexpr DXGI_FORMAT c_RenderTragetFormat{DXGI_FORMAT_R8G8B8A8_UNORM};
 
         struct GraphicsCoreState
         {
@@ -205,10 +215,13 @@ namespace Anomaly::graphics::d3d12::core
             DescriptorHeap srvDescHeap{ D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV };
             DescriptorHeap uavDescHeap{ D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV };
 
+            DescriptorHandle ImguiImageHandle{};
+
             u32 DeferredReleasesFlag[c_FrameBufferCount]{};
             std::mutex DeferredReleasesMutex{};
 
-            std::unordered_map<Window*, Ref<D3D12_Surface>> Surfaces;
+            std::unordered_map<Window*, Ref<D3D12_Surface>> Surfaces{};
+            Window* MainWindow{nullptr};
         };
 
         static Scope<GraphicsCoreState> s_State;
@@ -346,7 +359,7 @@ namespace Anomaly::graphics::d3d12::core
         bool result{ true };
         result &= s_State->rtvDescHeap.Initialize(512, false);
         result &= s_State->dsvDescHeap.Initialize(512, false);
-        result &= s_State->srvDescHeap.Initialize(4096, false);
+        result &= s_State->srvDescHeap.Initialize(4096, true);
         result &= s_State->uavDescHeap.Initialize(512, false);
         if(!result) return false;
 
@@ -354,6 +367,29 @@ namespace Anomaly::graphics::d3d12::core
         NAME_D3D12_OBJECT(s_State->dsvDescHeap.Heap(), "DSV Descriptor Heap");
         NAME_D3D12_OBJECT(s_State->srvDescHeap.Heap(), "SRV Descriptor Heap");
         NAME_D3D12_OBJECT(s_State->uavDescHeap.Heap(), "UAV Descriptor Heap");
+
+        // Setup Dear ImGui context
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+        //io.ConfigViewportsNoAutoMerge = true;
+        //io.ConfigViewportsNoTaskBarIcon = true;
+
+        // Setup Dear ImGui style
+        ImGui::StyleColorsDark();
+        //ImGui::StyleColorsLight();
+
+        // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+        ImGuiStyle& style = ImGui::GetStyle();
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            style.WindowRounding = 0.0f;
+            style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+        }
 
         // Create swap chains for each window
         
@@ -368,6 +404,13 @@ namespace Anomaly::graphics::d3d12::core
 
     void Shutdown()
     {
+        if(s_State->MainWindow)
+        {
+            ImGui_ImplDX12_Shutdown();
+            ImGui_ImplWin32_Shutdown();
+            ImGui::DestroyContext();
+        }
+
         for(auto& surface : s_State->Surfaces)
         {
             surface.second = nullptr;
@@ -417,14 +460,9 @@ namespace Anomaly::graphics::d3d12::core
         Ref<D3D12_Surface> surface = s_State->Surfaces[index];
 
         {
-            D3D12_RESOURCE_BARRIER barrier{};
-            barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-            barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-            barrier.Transition.pResource = surface->GetResource();
-            barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-            barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
-            barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-
+            CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(surface->GetResource(), 
+                                                                                D3D12_RESOURCE_STATE_PRESENT, 
+                                                                                D3D12_RESOURCE_STATE_RENDER_TARGET);
             CommandList->ResourceBarrier( 1, &barrier);
         }
 
@@ -432,22 +470,37 @@ namespace Anomaly::graphics::d3d12::core
         CommandList->RSSetScissorRects(1, &surface->GetRect());
         CommandList->OMSetRenderTargets(1, &surface->GetRtv(), false, nullptr);
 
-        const float clearColor[] = { 0.0f, 0.2f, 0.4f, 0.5f };
-        CommandList->ClearRenderTargetView(surface->GetRtv(), clearColor, 0, nullptr);
+        //Imgui render
+        if(s_State->MainWindow)
+        {
+            // Start the Dear ImGui frame
+            ImGui_ImplDX12_NewFrame();
+            ImGui_ImplWin32_NewFrame();
+            ImGui::NewFrame();
 
-        // Select Render target
-        // Bind pipeline
-        // Bind vertex and index buffers
-        // Draw call
+            event::EventData data{};
+            data.code = event::eSystemEventCode::EVENT_CODE_IMGUI_EVENT;
+            event::FireEvent(event::eSystemEventCode::EVENT_CODE_IMGUI_EVENT, data);
+
+            ImGui::Render();
+
+            auto heap = s_State->srvDescHeap.Heap();
+            CommandList->SetDescriptorHeaps(1, &heap);
+            ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), CommandList);
+
+            // Update and Render additional Platform Windows
+            ImGuiIO& io = ImGui::GetIO(); (void)io;
+            if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+            {
+                ImGui::UpdatePlatformWindows();
+                ImGui::RenderPlatformWindowsDefault(NULL, (void*)CommandList);
+            }
+        }
 
         {
-            D3D12_RESOURCE_BARRIER barrier{};
-            barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-            barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-            barrier.Transition.pResource = surface->GetResource();
-            barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-            barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
-            barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+            CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(surface->GetResource(), 
+                                                                                D3D12_RESOURCE_STATE_RENDER_TARGET, 
+                                                                                D3D12_RESOURCE_STATE_PRESENT);
 
             CommandList->ResourceBarrier( 1, &barrier);
         }
@@ -458,6 +511,19 @@ namespace Anomaly::graphics::d3d12::core
 
     Surface* CreateSurface(Window* index)
     {
+        if(s_State->Surfaces.empty())
+        {
+            WindowsWindow* windowsWindow = reinterpret_cast<WindowsWindow*>(index);
+            HWND hwnd = windowsWindow->GetHandle();
+            ImGui_ImplWin32_Init(hwnd);
+            s_State->ImguiImageHandle = s_State->srvDescHeap.Allocate();
+            ImGui_ImplDX12_Init(GetDevice().Get(), 3,
+                c_RenderTragetFormat, s_State->srvDescHeap.Heap(),
+                s_State->ImguiImageHandle.CPU,
+                s_State->ImguiImageHandle.GPU);
+
+            s_State->MainWindow = index;
+        }
         s_State->Surfaces[index] = CreateRef<D3D12_Surface>(index);
         return s_State->Surfaces[index].get();
     }
@@ -484,7 +550,8 @@ namespace Anomaly::graphics::d3d12::core
 
     void Flush()
     {
-        s_State->GraphicsCommand.Flush();
+        if(s_State)
+           s_State->GraphicsCommand.Flush();
     }
 
     u32 CurrentFrameIndex() 
@@ -536,4 +603,40 @@ namespace Anomaly::graphics::d3d12::core
         return s_State->uavDescHeap;
     }
 
+
+    void UploadTextureData(ID3D12Resource* resource, D3D12_SUBRESOURCE_DATA* textureData)
+    {
+        // TODO: make use of the copy command and wait until it is finished
+        ComPtr<ID3D12Resource> textureUploadHeap;
+
+        const u64 uploadBufferSize = GetRequiredIntermediateSize(resource, 0, 1);
+
+        CD3DX12_HEAP_PROPERTIES heapProperties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+        
+        CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize);
+        
+        GetDevice()->CreateCommittedResource(
+            &heapProperties,
+            D3D12_HEAP_FLAG_NONE,
+            &resourceDesc,
+            D3D12_RESOURCE_STATE_GENERIC_READ,
+            nullptr,
+            IID_PPV_ARGS(&textureUploadHeap));
+
+        Flush();
+
+        s_State->GraphicsCommand.BeginFrame();
+        ID3D12GraphicsCommandList6* CommandList{ s_State->GraphicsCommand.CommandList() };
+
+
+        CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(resource, 
+                                                                                D3D12_RESOURCE_STATE_COPY_DEST, 
+                                                                                D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+
+        UpdateSubresources(CommandList, resource, textureUploadHeap.Get(), 0, 0, 1, textureData);
+        CommandList->ResourceBarrier(1, &barrier);
+
+        s_State->GraphicsCommand.EndFrame();
+        Flush();
+    }
 }

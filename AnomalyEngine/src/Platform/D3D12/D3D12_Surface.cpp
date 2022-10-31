@@ -35,7 +35,7 @@ namespace Anomaly::graphics::d3d12
         }
     }
 
-    void D3D12_Surface::Resize(u32 width, u32 height) 
+    void D3D12_Surface::Resize() 
     {
         core::Flush();
         for(u32 i{0}; i < c_NumBackBuffers; i++)
@@ -43,6 +43,9 @@ namespace Anomaly::graphics::d3d12
             RenderTargetData& data{m_RenderTargetData[i]};
             data.Resource = nullptr;
         }
+
+        u32 width = GetWidth() <= 0 ? 1 : GetWidth();
+        u32 height = GetHeight() <= 0 ? 1 : GetHeight();
 
         DXGI_SWAP_CHAIN_DESC1 desc{};
         AWINDOWS_ASSERT(m_Swapchain->GetDesc1(&desc));
@@ -116,8 +119,7 @@ namespace Anomaly::graphics::d3d12
         AWINDOWS_ASSERT(m_Swapchain->GetDesc(&desc));
         const u32 width{desc.BufferDesc.Width};
         const u32 height{desc.BufferDesc.Height};
-        AASSERT(m_Window->GetWidth() == width && m_Window->GetHeight() == height);
-
+        
         m_ViewPort.TopLeftX = 0.f;
         m_ViewPort.TopLeftY = 0.f;
         m_ViewPort.Width = (float)width;

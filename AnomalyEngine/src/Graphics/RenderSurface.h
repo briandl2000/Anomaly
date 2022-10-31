@@ -16,7 +16,7 @@ namespace Anomaly::graphics
 
         virtual ~Surface() {};
 
-        virtual void Resize(u32 width, u32 height) = 0;
+        virtual void Resize() = 0;
         virtual void SwapBuffers() = 0;
         virtual u32 GetWidth() = 0;
         virtual u32 GetHeight() = 0;

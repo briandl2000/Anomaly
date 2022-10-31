@@ -1,6 +1,7 @@
 [
     {
-        "key": "alt+enter",
-        "command": ""
+        "key": "ctrl+shift+c",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Clean"
     }
 ]

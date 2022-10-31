@@ -117,7 +117,11 @@
         "thread": "cpp",
         "unordered_map": "cpp",
         "list": "cpp",
-        "xhash": "cpp"
+        "xhash": "cpp",
+        "functional": "cpp",
+        "xthread": "cpp",
+        "xfunctional": "cpp",
+        "xmemory0": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 } 

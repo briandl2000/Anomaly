@@ -49,7 +49,7 @@ namespace Anomaly
         return m_Height;
     }
 
-    AString WindowsWindow::GetName() {
+    std::string WindowsWindow::GetName() {
         return m_Name;
     }
 
@@ -58,7 +58,7 @@ namespace Anomaly
         m_Height = height;
         if(m_Surface)
         {
-            m_Surface->Resize(width, height);
+        m_Surface->Resize();
         }
     }
 }
